@@ -1,0 +1,31 @@
+.outputBox {
+
+    padding-bottom: 40px;
+    flex: 1;
+    margin-left: 10px;
+
+}
+
+.output {
+
+
+    font-size: 16px;
+    color: #000;
+
+    width: 100%;
+    height: 96%;
+    resize: none;
+    border: 1px solid black;
+    padding-top: 10px;
+    padding-left: 10px;
+    border-radius: 5px;
+}
+
+.outputBox>h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.outputBox>p {
+    margin: 0;
+}

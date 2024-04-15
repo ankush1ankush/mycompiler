@@ -1,0 +1,12 @@
+.container2 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 29px;
+}
+
+.container {
+    display: flex;
+
+
+}
