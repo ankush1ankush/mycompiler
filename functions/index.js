@@ -25,7 +25,7 @@ app.use(express.json());
 
 
 
-connectMongoDb("mongodb+srv://ankushpaul142001:xtqeeTsbwmOFZavO@cluster0.zov0qfr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").catch(err => console.log(err));
+connectMongoDb("mongodb://localhost:27017/CompilerApp").catch(err => console.log(err));
 
 
 app.get("/", (req, res) => {
@@ -43,7 +43,7 @@ app.post("/run", async (req,res)=>{
    
     if(code===undefined)
     {
-    res.send(400).json({success:false ,error :"Empty code body!"})
+    res.send(200).json({success:false ,error :"Empty code body!"})
     }
 
     
@@ -139,7 +139,7 @@ app.post("/run", async (req,res)=>{
         job["output"]=output;
         console.log(output);
         await job.save()
-       console.log(job)
+        console.log(job)
       
     }).catch(async (error)=>{
         
@@ -170,7 +170,7 @@ app.get("/status", async (req,res)=>{
 
   if(jobId===undefined)
   {
-    return res.status(400).json({success:false,error:"missing id query params"})
+    return res.status(200).json({success:false,error:"missing id query params"})
   }
   
   
@@ -184,7 +184,7 @@ app.get("/status", async (req,res)=>{
    
   if(job===undefined)
   {
-    return res.status(404).json({success:false,error:"invalid job id"});
+    return res.status(200).json({success:false,error:"invalid job id"});
   }
    
   //console.log(JSON.parse(job.output));
@@ -214,7 +214,7 @@ app.get("/delete", async (req,res)=>{
 
   if(jobId===undefined)
   {
-    return res.status(400).json({success:false,error:"missing id query params"})
+    return res.status(200).json({success:false,error:"missing id query params"})
   }
   
 
@@ -224,24 +224,26 @@ app.get("/delete", async (req,res)=>{
      console.log(job);
     if(job===undefined)
     {
-      return res.status(404).json({success:false,error:"invalid job id"});
+      return res.status(200).json({success:false,error:"invalid job id"});
     }
      
     //console.log(JSON.parse(job.output));
       
-
-    const fileStatus= await deleteFile(job.filepath,job.inputpath);
-
+    if(job?.filepath){
+    const fileStatus= await deleteFile(job?.filepath,job.inputpath)|| false;
     console.log(fileStatus);
-
-    
     await Job.findOneAndDelete({_id:jobId});
-    if(fileStatus.status){
+    if(fileStatus?.status){
         res.status(200).json({success:true,status:"Deleted"});
     }
     else{
         res.status(200).json({success:false,status:"notDeleted"}); 
     }
+    }
+    
+
+    
+    
     }
     catch(err)
     {  

@@ -1,0 +1,36 @@
+.userBox {
+    margin-right: 5px;
+    margin-left: 10px;
+    
+}
+
+.userColumn {
+    min-height: 85vh;
+    min-width: 100px;
+
+    display:flex ;
+    resize: none;
+    font-size: 16px;
+    border-radius: 5px;
+    border: solid black 1px;
+}
+
+
+.userBox>h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+
+.userHead {
+
+    display: flex;
+    
+}
+
+.userHead>h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
