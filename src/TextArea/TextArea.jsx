@@ -3,33 +3,24 @@ import axios from "../axios/Axios"
 import "./TextArea.css"
 import stubs from '../stubs/stubs';
 
-function TextArea({ setoutPut, userInput }) {
 
-    const [usercode, setcode] = useState('');
-    const [userLang, setLang] = useState("cpp");
+function TextArea({ setoutPut, userInput, usercode, setcode , userLang, setLang}) {
 
+    const [isActive,Setbutton] = useState(false);
     let interval = useRef();
-
 
     useEffect(() => {
         setcode(stubs[userLang]);
     }, [userLang])
+
     function handleChange(e) {
-
-
         const codeToSet = e.target.value;
         setcode(codeToSet);
         //console.log(Usercode);
-
-
     }
-
-
+    
     async function handleClick() {
-
-
-
-
+        Setbutton(true);
         try {
             const response = await axios({
                 method: 'post',
@@ -40,32 +31,20 @@ function TextArea({ setoutPut, userInput }) {
                     input: userInput
                 }
             });
-
-
             const output = response.data
             //console.log(output)
-
             if (output?.jobId) {
-
-
-                interval = setInterval(async () => {
-
-
+                 interval = setInterval(async () => {
                     const { data: dataRes } = await axios.get("/status", { params: { id: output.jobId } })
-
-
                     if (dataRes?.status === "success") {
-
-
                         setoutPut(dataRes?.output)
-
                         const { data: isDeleted } = await axios.get("/delete", { params: { id: output.jobId } })
                         console.log(isDeleted)
                         if (isDeleted?.status === "deleted") {
                             console.log("deleted");
                         }
-
                         clearInterval(interval);
+                        Setbutton(false);
                     }
                     else if (dataRes?.status === "pending") {
                         setoutPut("Pendding");
@@ -74,24 +53,11 @@ function TextArea({ setoutPut, userInput }) {
                         console.log(dataRes?.output);
                         setoutPut(dataRes?.output);
                         clearInterval(interval);
+                        Setbutton(false);
                     }
-
-
-
-
-
-
-
-
-
-
-
                 }, 1000)
             }
-
-
         } catch (error) {
-
             console.error('AxiosError:', error);
         }
     }
@@ -119,7 +85,7 @@ function TextArea({ setoutPut, userInput }) {
             </div>
             <textarea className='usercode' name='Mycode' onChange={handleChange} value={usercode}></textarea>
             <br />
-            <button onClick={handleClick}>submit</button>
+            <button onClick={handleClick} disabled = {isActive}>submit</button>
 
         </div>
     )
